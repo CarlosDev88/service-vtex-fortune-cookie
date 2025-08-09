@@ -8,6 +8,7 @@ import { getAllMessages } from './middlewares/getAllMessages'
 import { createCookieFortune } from './middlewares/createCookieFortune'
 import { randomFortune } from './middlewares/randomFortune'
 import { deleteFortuneCookie } from './middlewares/deleteFortuneCookie'
+import { vtexAuth } from './middlewares/vtexAuth'
 
 const TIMEOUT_MS = 800
 
@@ -46,21 +47,20 @@ declare global {
 export default new Service({
   clients,
   routes: {
-    // `status` is the route ID from service.json. It maps to an array of middlewares (or a single handler).
     status: method({
       GET: [validate, status],
     }),
     getAllMessages: method({
-      GET: [getAllMessages],
+      GET: [vtexAuth, getAllMessages],
     }),
     getrandom: method({
       GET: [randomFortune],
     }),
     createFortuneCookie: method({
-      POST: [createCookieFortune],
+      POST: [vtexAuth, createCookieFortune],
     }),
     deleteFortuneCookie: method({
-      DELETE: [deleteFortuneCookie],
+      DELETE: [vtexAuth, deleteFortuneCookie],
     }),
   },
 })
