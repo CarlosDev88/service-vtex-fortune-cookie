@@ -7,5 +7,4 @@ export class Clients extends IOClients {
   public get status() {
     return this.getOrSet('status', Status)
   }
-
 }

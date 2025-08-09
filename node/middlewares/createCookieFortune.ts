@@ -10,19 +10,20 @@ export async function createCookieFortune(
 
   const data = await parser(ctx.req)
 
-  // Creamos un nuevo documento en la data entity 'CF'
-  await masterdata.createDocument({
+  const result = await masterdata.createDocument({
     dataEntity: 'CF',
     fields: {
-      CookieFortune: data.CookieFortune, // Asegúrate que esto venga en el body
+      CookieFortune: data.CookieFortune,
     },
-    schema: 'default', // Asegúrate que el schema tenga ese nombre en tu Master Data v2
+    schema: 'default',
   })
 
   ctx.status = 201
   ctx.body = {
     message: 'Galleta de la fortuna creada con éxito',
     ok: true,
+    id: result.DocumentId,
+    CookieFortune: data.CookieFortune,
   }
 
   await next()
