@@ -77,7 +77,9 @@ GET /_v/message
 **Descripción**: Obtiene un mensaje de galleta de la fortuna aleatorio junto con un número de la suerte
 
 - **Público**: ✅
-- **Autenticación**: No requerida
+- **Autenticación**: ❌ No requerida
+- **Justificación**: Este endpoint se mantiene sin autenticación para facilitar el acceso directo desde el frontend y mejorar la experiencia del usuario, permitiendo que cualquier aplicación cliente pueda consumir mensajes de fortuna sin necesidad de gestionar tokens de autenticación.
+
 - **Respuesta exitosa** (200):
 ```json
 {
@@ -169,6 +171,23 @@ El servicio utiliza la entidad de datos `CF` en Master Data con los siguientes c
 - **id**: Identificador único del documento
 - **CookieFortune**: Mensaje de la galleta de la fortuna (string)
 
+### Cliente de Master Data
+
+**Implementación**: El servicio utiliza el **cliente nativo de Master Data que proporciona VTEX IO** para todas las operaciones de acceso a datos. Este cliente oficial ofrece:
+
+- **Integración nativa**: Conexión directa con la API de Master Data sin necesidad de configuración adicional
+- **Autenticación automática**: Manejo transparente de credenciales y tokens de servicio
+- **Optimización de rendimiento**: Pooling de conexiones y manejo eficiente de requests
+- **Manejo de errores**: Gestión automática de reintentos y recuperación de errores
+- **Tipos seguros**: Interfaces TypeScript para operaciones CRUD
+
+**Operaciones soportadas**:
+- `search()` - Búsqueda de documentos con filtros
+- `get()` - Obtención de documento por ID
+- `save()` - Creación de nuevos documentos
+- `update()` - Actualización de documentos existentes
+- `delete()` - Eliminación de documentos
+
 ## Características Técnicas
 
 ### Cache y Rendimiento
@@ -214,12 +233,14 @@ El servicio incluye métricas de cache que se pueden monitorear:
 
 - **VTEX IO Node.js Runtime**: 6.x
 - **Master Data**: Para almacenamiento de mensajes
+- **Cliente Master Data VTEX**: Cliente oficial para operaciones de datos
 - **LRU Cache**: Para optimización de rendimiento
 - **co-body**: Para parsing de requests
 
 ## Consideraciones de Seguridad
 
 - Todos los endpoints de escritura requieren autenticación VTEX
+- **Excepción de seguridad**: El endpoint `/message` (GET) se mantiene público para facilitar el acceso desde frontend
 - Validación de tokens JWT con verificación de expiración
 - Políticas de acceso restringidas a dominios específicos
 - Timeouts configurados para prevenir ataques de denegación de servicio
