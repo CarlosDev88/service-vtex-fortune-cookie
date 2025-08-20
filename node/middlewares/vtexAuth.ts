@@ -56,14 +56,6 @@ export async function vtexAuth(ctx: Context, next: () => Promise<void>) {
       return
     }
 
-    // Validar que es admin
-    if (payload.audience !== 'admin') {
-      ctx.status = 403
-      ctx.body = { error: 'Se requieren permisos de administrador' }
-
-      return
-    }
-
     // Continuar al siguiente middleware
     await next()
   } catch (error) {
